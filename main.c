@@ -1,7 +1,15 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-#define SIZE 11
+#define SIZE 10
 
+void FillField(char Field[SIZE][SIZE]) {
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++) {
+      Field[i][j] = '0';
+    }
+  }
+}
 
 void InputShip() {
   int x, y;
@@ -11,58 +19,29 @@ void InputShip() {
 }
 
 void OutPutField(char Field[SIZE][SIZE]) {
-  for (int i = 0; i <= 10; i++) {
-    for (int j = 0; j <= 10; j++) {
+  const char alp[SIZE] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+
+  printf("   ");
+  for (int i = 0; i < SIZE; i++) {
+    printf("%c ", alp[i]);
+  }
+  printf("\n");
+  for (int i = 0; i < SIZE; i++) {
+    printf("%d  ", i);
+    for (int j = 0; j < SIZE; j++) {
       printf("%c ", Field[i][j]);
     }
-  printf("\n");
+    printf("\n");
   }
 }
 
 
 int main () {
-  char PlayerField[SIZE][SIZE] = {
-    {' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'},
-    {'0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-    {'1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-    {'2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-    {'3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-    {'4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-    {'5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-    {'6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-    {'7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-    {'8', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-    {'9', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'},
-  };
 
-  int surface[10][10];
+  char PlayerField[SIZE][SIZE];
+  FillField(PlayerField);
+  OutPutField(PlayerField);
 
-    for (int i = 0; i < 10; i++) {
-      for (int j = 0; j < 10; j++) {
-        surface[i][j] = 0;
-      }
-    }
-
-   const char alp[10] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
-
-    printf("   ");
-    for (int i = 0; i < 10; i++) {
-      printf("%c ", alp[i]);
-    }
-    printf("\n");
-    for (int i = 0; i < 10; i++) {
-      printf("%d  ", i);
-      for (int j = 0; j < 10; j++) {
-        printf("%d ", surface[i][j]);
-      }
-      printf("\n");
-    }
-
-
-
-//OutPutField(PlayerField);
-//InputShip();
-
-  int n;
-  scanf("%d", &n);
+  system ("pause");
+  return 0;
 }
