@@ -11,19 +11,29 @@ void FillField(char Field[SIZE][SIZE]) {
   }
 }
 
-void InputShip() {
-  int x, y;
-  char direction;
-  printf("Input left top coordinate(x, y) and direction ship(x, y, [h, v]): ");
-  scanf("%d%d%c", &x, &y, &direction);
+void InputShip(int LenShip) {
+  int y;
+  char x, direction;
+  printf("Input left top coordinate and direction for %d deck ship(x, y, [h, v]): ", LenShip);
+  scanf("%c%d%c", &x, &y, &direction);
+  fflush(stdin);
+
+}
+/*
+void SetHorizontalShip(char Field[SIZE][SIZE]) {
+
 }
 
+void SetVerticalShip(char Field[SIZE][SIZE]) {
+
+}
+*/
 void OutPutField(char Field[SIZE][SIZE]) {
-  const char alp[SIZE] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+  const char Alp[SIZE] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
   printf("   ");
   for (int i = 0; i < SIZE; i++) {
-    printf("%c ", alp[i]);
+    printf("%c ", Alp[i]);
   }
   printf("\n");
   for (int i = 0; i < SIZE; i++) {
@@ -37,10 +47,14 @@ void OutPutField(char Field[SIZE][SIZE]) {
 
 
 int main () {
-
+  int LenShips[SIZE] = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
   char PlayerField[SIZE][SIZE];
   FillField(PlayerField);
   OutPutField(PlayerField);
+
+  for (int i = 0; i < SIZE; i++) {
+  InputShip(LenShips[i]);
+  }
 
   system ("pause");
   return 0;
