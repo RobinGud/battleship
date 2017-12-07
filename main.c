@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const int SIZE = 10;
+//const int SIZE = 10;
+#define SIZE 10
 
 void FillField(char Field[SIZE][SIZE]) {
   for (int i = 0; i < SIZE; i++) {
@@ -11,14 +12,51 @@ void FillField(char Field[SIZE][SIZE]) {
   }
 }
 
+void SetSeparator(char Field[SIZE][SIZE], int X, int Y) {
+  if (Field[X][Y] == '0') {
+    Field[X][Y] = '*';
+  }
+}
+
+void CheckSeparator(char Field[SIZE][SIZE], int X, int Y) {
+  if (X - 1 >= 0 && Y + 1 <= SIZE) {
+    SetSeparator(Field, X - 1, Y + 1);
+  };
+  if (Y + 1 <= SIZE) {
+    SetSeparator(Field, X, Y + 1);
+  };
+  if (X + 1 <= SIZE && Y + 1 <= SIZE) {
+    SetSeparator(Field, X + 1, Y + 1);
+  };
+  if (X - 1 >= 0) {
+    SetSeparator(Field, X - 1, Y);
+  };
+  if (X + 1 <= SIZE) {
+    SetSeparator(Field, X + 1, Y);
+  };
+  if (X - 1 >= 0 && Y - 1 >= 0) {
+    SetSeparator(Field, X - 1, Y - 1);
+  };
+  if (Y - 1 >= 0) {
+    SetSeparator(Field, X, Y - 1);
+  };
+  if (X + 1 <= SIZE && Y - 1 >= 0) {
+    SetSeparator(Field, X + 1, Y - 1);
+  };
+}
+
 int SetHorizontalShip(char Field[SIZE][SIZE], int X, int Y, int LenShip) {
-  for(int i = X; i < X + LenShip; i++)
+  for(int i = X; i < X + LenShip; i++) {
     Field[Y][i] = '1';
+    CheckSeparator(Field, Y, i);
+  }
 }
 
 int SetVerticalShip(char Field[SIZE][SIZE], int X, int Y,int LenShip) {
-  for(int i = Y; i < Y + LenShip; i++)
+  for(int i = Y; i < Y + LenShip; i++) {
     Field[i][X] = '1';
+    CheckSeparator(Field, i, X);
+  }
 }
 
 int CheckHorizontalCoordinate(char Field[SIZE][SIZE], int X, int Y, int LenShip) {
