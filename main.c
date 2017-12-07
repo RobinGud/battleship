@@ -1,8 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 //const int SIZE = 10;
 #define SIZE 10
+
+int Random(int MaxNum, int ratio) {
+  srand(time(NULL) * ratio);
+  int Num = rand() % MaxNum;
+  return Num;
+}
 
 void FillField(char Field[SIZE][SIZE]) {
   for (int i = 0; i < SIZE; i++) {
@@ -83,7 +90,7 @@ int CheckVerticalCoordinate(char Field[SIZE][SIZE], int X, int Y, int LenShip) {
   return 0;
 }
 
-void InputShip(int LenShip, char Field[SIZE][SIZE] ) {
+void InputShip(int LenShip, char Field[SIZE][SIZE]) {
   int Y, Status = 1, X;
   char charX, Direction;
   while (Status == 1) {
@@ -98,9 +105,19 @@ void InputShip(int LenShip, char Field[SIZE][SIZE] ) {
   }
 }
 
+void GenerateShip(int LenShip, char Field[SIZE][SIZE]){
+  int Y, X, Direction, Status = 1;
+  while(Status == 1) {
+  X = Random(SIZE, 25 - LenShip);
+  Y = Random(SIZE, 9 * LenShip);
+  Direction = Random(2, 2);
+  //printf("\n%d %d %d\n",X, Y, Direction);
+  (Direction == 1) ?  (Status = CheckHorizontalCoordinate(Field, X, Y, LenShip)) : (Status = CheckVerticalCoordinate(Field, X, Y, LenShip));
+ }
+}
+
 void OutPutField(char Field[SIZE][SIZE]) {
   const char Alp[SIZE] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
-
   printf("   ");
   for (int i = 0; i < SIZE; i++) {
     printf("%c ", Alp[i]);
@@ -115,17 +132,21 @@ void OutPutField(char Field[SIZE][SIZE]) {
   }
 }
 
-
 int main () {
   int LenShips[SIZE] = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
   char PlayerField[SIZE][SIZE];
+  char EnemyField[SIZE][SIZE];
   FillField(PlayerField);
   OutPutField(PlayerField);
-
   for (int i = 0; i < SIZE; i++) {
     InputShip(LenShips[i], PlayerField);
     OutPutField(PlayerField);
   }
+  FillField(EnemyField);
+  for (int i = 0; i < SIZE; i++) {
+    GenerateShip(LenShips[i], EnemyField);
+  }
+  OutPutField(EnemyField);
 
   system ("pause");
   return 0;
