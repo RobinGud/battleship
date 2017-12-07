@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define SIZE 10
+const int SIZE = 10;
 
 void FillField(char Field[SIZE][SIZE]) {
   for (int i = 0; i < SIZE; i++) {
@@ -22,25 +22,25 @@ int SetVerticalShip(char Field[SIZE][SIZE], int X, int Y,int LenShip) {
 }
 
 int CheckHorizontalCoordinate(char Field[SIZE][SIZE], int X, int Y, int LenShip) {
-  if (X + LenShip <= SIZE) {
-    for(int i = X; i < X + LenShip; i++)
+  if (X + LenShip > SIZE) {
+      return 1;
+  }
+    for(int i = X; i < X + LenShip; i++) {
       if (Field[Y][i] != '0')
         return 1;
   }
-  else
-    return 1;
   SetHorizontalShip(Field, X, Y, LenShip);
   return 0;
 }
 
 int CheckVerticalCoordinate(char Field[SIZE][SIZE], int X, int Y, int LenShip) {
-  if (Y + LenShip <= SIZE) {
-    for(int i = Y; i < Y + LenShip; i++)
+  if (Y + LenShip > SIZE) {
+    return 1;
+  }
+  for(int i = Y; i < Y + LenShip; i++) {
       if (Field[i][X] != '0')
         return 1;
   }
-  else
-    return 1;
   SetVerticalShip(Field, X, Y, LenShip);
   return 0;
 }
