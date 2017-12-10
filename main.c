@@ -105,7 +105,7 @@ void InputShip(int LenShip, char Field[SIZE][SIZE]) {
     scanf("%1c%1d%1c", &charX, &Y, &Direction);
     fflush(stdin);
     X = (int)charX - 97;
-    if ((X >= 0) && (X <= 9) && (Y >= 0) && (Y <= 9) && ((Direction == 'h') || (Direction == 'v')))
+    if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE) && ((Direction == 'h') || (Direction == 'v')))
       (Direction == 'h') ? (Status = CheckHorizontalCoordinate(Field, X, Y, LenShip)) : (Status = CheckVerticalCoordinate(Field, X, Y, LenShip));
     if (Status == 1)
       printf("Error. Try again.\n");
@@ -143,22 +143,90 @@ void OutPutField(char Field[SIZE][SIZE]) {
   }
 }
 
+void CheckShotSeparator(char Field[SIZE][SIZE], int X, int Y) {
+  if (X - 1 >= 0 && Y + 1 < SIZE) {
+    SetSeparator(Field, X - 1, Y + 1);
+  };
+  if (X + 1 < SIZE && Y + 1 < SIZE) {
+    SetSeparator(Field, X + 1, Y + 1);
+  };
+  if (X - 1 >= 0 && Y - 1 >= 0) {
+    SetSeparator(Field, X - 1, Y - 1);
+  };
+  if (X + 1 < SIZE && Y - 1 >= 0) {
+    SetSeparator(Field, X + 1, Y - 1);
+  };
+}
+
+int PlayerShot(char Field[SIZE][SIZE], char EnemyField[SIZE][SIZE], int X, int Y) {
+  if (Field[Y][X] == '*' || Field[Y][X] == '#') {
+    return 1;
+  }
+  if (EnemyField[Y][X] == '1') {
+    Field[Y][X] = '#';
+    CheckShotSeparator(Field, Y, X);
+    return 2;
+  }
+  else {
+    Field[Y][X] = '*';
+    return 0;
+  }
+}
+
+void InputShotCoordinate(char Field[SIZE][SIZE], char EnemyField[SIZE][SIZE]) {
+  int X, Y, Status = 1;
+  char charX;
+  while (Status == 1 || Status == 2) {
+    printf("\nInput coordinate of the shot: " );
+    scanf("%1c%1d", &charX, &Y);
+    fflush(stdin);
+    X = (int)charX - 97;
+    if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE)) {
+      Status = PlayerShot(Field, EnemyField, X, Y);
+    }
+    if (Status == 1)
+      printf("Error. Try again.\n");
+    if (Status == 2) {
+      printf("Good shot! You got in ship!\n");
+      OutPutField(Field);
+    }
+  }
+}
+
 int main () {
   int LenShips[SIZE] = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
   char PlayerField[SIZE][SIZE];
+  char PlayerShotsField[SIZE][SIZE];
   char EnemyField[SIZE][SIZE];
+  printf("\n");
+  FillField(PlayerShotsField);
+  //OutPutField(PlayerShotsField);
   //FillField(PlayerField);
   //OutPutField(PlayerField);
   //for (int i = 0; i < SIZE; i++) {
     //InputShip(LenShips[i], PlayerField);
     //OutPutField(PlayerField);
   //}
+
+  FillField(PlayerField);
+  for (int i = 0; i < SIZE; i++) {
+    GenerateShip(LenShips[i], PlayerField);
+  }
+  OutPutField(PlayerField);
+
+  printf("\n");
+
   FillField(EnemyField);
   for (int i = 0; i < SIZE; i++) {
     GenerateShip(LenShips[i], EnemyField);
   }
   OutPutField(EnemyField);
-
+  printf("\n");
+  while (1 == 1) {
+    InputShotCoordinate(PlayerShotsField, EnemyField);
+    OutPutField(PlayerShotsField);
+    printf("\n");
+  }
   system ("pause");
   return 0;
 }
