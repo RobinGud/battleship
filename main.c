@@ -5,10 +5,17 @@
 //const int SIZE = 10;
 #define SIZE 10
 
-int Random(int MaxNum, int ratio) {
-  srand(time(NULL) * ratio);
+int Random(int MaxNum) {
+  srand(time(NULL));
   int Num = rand() % MaxNum;
   return Num;
+}
+
+int RandomArray(int Array[SIZE]) {
+    srand(time(NULL));
+    for (int i = 0; i < SIZE; i++) {
+        Array[i] = rand() % SIZE;
+    }
 }
 
 void FillField(char Field[SIZE][SIZE]) {
@@ -26,19 +33,19 @@ void SetSeparator(char Field[SIZE][SIZE], int X, int Y) {
 }
 
 void CheckSeparator(char Field[SIZE][SIZE], int X, int Y) {
-  if (X - 1 >= 0 && Y + 1 <= SIZE) {
+  if (X - 1 >= 0 && Y + 1 < SIZE) {
     SetSeparator(Field, X - 1, Y + 1);
   };
-  if (Y + 1 <= SIZE) {
+  if (Y + 1 < SIZE) {
     SetSeparator(Field, X, Y + 1);
   };
-  if (X + 1 <= SIZE && Y + 1 <= SIZE) {
+  if (X + 1 < SIZE && Y + 1 < SIZE) {
     SetSeparator(Field, X + 1, Y + 1);
   };
   if (X - 1 >= 0) {
     SetSeparator(Field, X - 1, Y);
   };
-  if (X + 1 <= SIZE) {
+  if (X + 1 < SIZE) {
     SetSeparator(Field, X + 1, Y);
   };
   if (X - 1 >= 0 && Y - 1 >= 0) {
@@ -47,7 +54,7 @@ void CheckSeparator(char Field[SIZE][SIZE], int X, int Y) {
   if (Y - 1 >= 0) {
     SetSeparator(Field, X, Y - 1);
   };
-  if (X + 1 <= SIZE && Y - 1 >= 0) {
+  if (X + 1 < SIZE && Y - 1 >= 0) {
     SetSeparator(Field, X + 1, Y - 1);
   };
 }
@@ -106,14 +113,18 @@ void InputShip(int LenShip, char Field[SIZE][SIZE]) {
 }
 
 void GenerateShip(int LenShip, char Field[SIZE][SIZE]){
-  int Y, X, Direction, Status = 1;
+  int Y, X, Direction, Status = 1, i = SIZE, Array[SIZE];
   while(Status == 1) {
-  X = Random(SIZE, 25 - LenShip);
-  Y = Random(SIZE, 9 * LenShip);
-  Direction = Random(2, 2);
-  //printf("\n%d %d %d\n",X, Y, Direction);
-  (Direction == 1) ?  (Status = CheckHorizontalCoordinate(Field, X, Y, LenShip)) : (Status = CheckVerticalCoordinate(Field, X, Y, LenShip));
- }
+    i++;
+    if (i >= SIZE) {
+      RandomArray(Array);
+      i = 0;
+    }
+    X = Array[i];
+    Y = Array[i+1];
+    Direction = Random(2);
+    (Direction == 1) ?  (Status = CheckHorizontalCoordinate(Field, X, Y, LenShip)) : (Status = CheckVerticalCoordinate(Field, X, Y, LenShip));
+  }
 }
 
 void OutPutField(char Field[SIZE][SIZE]) {
@@ -136,12 +147,12 @@ int main () {
   int LenShips[SIZE] = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
   char PlayerField[SIZE][SIZE];
   char EnemyField[SIZE][SIZE];
-  FillField(PlayerField);
-  OutPutField(PlayerField);
-  for (int i = 0; i < SIZE; i++) {
-    InputShip(LenShips[i], PlayerField);
-    OutPutField(PlayerField);
-  }
+  //FillField(PlayerField);
+  //OutPutField(PlayerField);
+  //for (int i = 0; i < SIZE; i++) {
+    //InputShip(LenShips[i], PlayerField);
+    //OutPutField(PlayerField);
+  //}
   FillField(EnemyField);
   for (int i = 0; i < SIZE; i++) {
     GenerateShip(LenShips[i], EnemyField);
