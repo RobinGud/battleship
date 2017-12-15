@@ -11,16 +11,12 @@ int EnemyKillSeparatorsX[6][2];
 int EnemyKillSeparatorsY[6][2];
 
 int main () {
-
   FillField(PlayerField);
   FillField(PlayerShotsField);
-  FillField(PlayerShotsField);
+  FillField(EnemyField);
   OutPutField(PlayerField, PlayerShotsField);
   poo(PlayerField);
-  printf("\n");
-  for( int i = 0; i < 6; i++) {
-    printf("%d %d   %d %d \n",PlayerKillSeparatorsX[i][0], PlayerKillSeparatorsY[i][0], PlayerKillSeparatorsX[i][1], PlayerKillSeparatorsY[i][1] );
-  }
+  eoo(EnemyField);
   system ("pause");
   return 0;
 }
