@@ -1,4 +1,5 @@
-#include "functions.h"
+#include "functionsLocated.h"
+#include "functionsShots.h"
 
 char PlayerField[SIZE][SIZE];
 char PlayerShotsField[SIZE][SIZE];
@@ -9,14 +10,14 @@ int PlayerKillSeparatorsY[6][2];
 int EnemyKillSmallSeparators[4][2];
 int EnemyKillSeparatorsX[6][2];
 int EnemyKillSeparatorsY[6][2];
+int PlayerHP = 20;
+int EnemyHP = 20;
 
 int main () {
-  FillField(PlayerField);
-  FillField(PlayerShotsField);
-  FillField(EnemyField);
-  OutPutField(PlayerField, PlayerShotsField);
-  poo(PlayerField);
-  eoo(EnemyField);
+  LocationShip();
+  InputShotCoordinate();
+  OutPutField(PlayerShotsField, EnemyField);
+
   system ("pause");
   return 0;
 }

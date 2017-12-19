@@ -193,8 +193,6 @@ void GenerateBigShip(char Field[SIZE][SIZE], int NumShip) {
     X = Array[i];
     Y = Array[i + 1];
     Direction = Array[i] % 2;
-    OutPutField(PlayerField, EnemyField);
-    printf("genbig %d %d\n", X, Y );
     if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE) && (Direction == 0))
       Status = SetHorizontalShip(Field, X, Y, NumShip, 2);
     if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE) && (Direction == 1))
@@ -212,14 +210,22 @@ void GenerateSmallShip(char Field[SIZE][SIZE],int NumShip) {
     }
     X = Array[i];
     Y = Array[i+1];
-    OutPutField(PlayerField, EnemyField);
-    printf("gensmall %d %d\n",X, Y );
     if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE) && (EnemyField[X][Y] == '0')) {
       EnemyField[X][Y] = Alp[NumShip];
       EnemyKillSmallSeparators[NumShip - 6][0] = X;
       EnemyKillSmallSeparators[NumShip - 6][1] = Y;
       CheckSeparator(Field, X, Y);
       Status = 0;
+    }
+  }
+}
+
+void ClearSeparators(char Field[SIZE][SIZE]) {
+  for (int i = 0; i < SIZE; i++) {
+    for (int j = 0; j < SIZE; j++) {
+      if(Field[i][j] == '*') {
+        Field[i][j] = '0';
+      }
     }
   }
 }
@@ -247,5 +253,17 @@ void eoo(char Field[SIZE][SIZE]) {
       GenerateBigShip(Field, i);
     }
   }
+  OutPutField(PlayerField, EnemyField);
+}
+
+void LocationShip() {
+  FillField(PlayerField);
+  FillField(PlayerShotsField);
+  FillField(EnemyField);
+  OutPutField(PlayerField, PlayerShotsField);
+  poo(PlayerField);
+  eoo(EnemyField);
+  ClearSeparators(PlayerField);
+  ClearSeparators(EnemyField);
   OutPutField(PlayerField, EnemyField);
 }
