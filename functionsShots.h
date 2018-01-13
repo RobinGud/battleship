@@ -127,6 +127,8 @@ int GenerateShotCoordinate() {
       if (PlayerField[X][Y] != '0') {
         XodBot = 1;
         Memory = 1;
+        XMem = X;
+        YMem = Y;
         int NumShip = (int)PlayerField[X][Y] - 65;
         HealthPlayerShip[NumShip] -= 1;
         PlayerHP -= 1;
@@ -135,6 +137,7 @@ int GenerateShotCoordinate() {
         CheckShotSeparator(PlayerField, X, Y);
         if (HealthPlayerShip[NumShip] == 0) {
           SetKillSeparators(NumShip, 2);
+          Memory = 0;
         }
       }
       else {
@@ -145,6 +148,74 @@ int GenerateShotCoordinate() {
   }
   OutPutField(PlayerField, EnemyField);
   return 0;
+}
+
+int DirShotCoordinate(int X, int Y) {
+  if (X < SIZE && X >= 0 && Y < SIZE && Y >= 0) {
+    if (PlayerField[X][Y] != '*') {
+      if (PlayerField[X][Y] != '0') {
+        XodBot = 1;
+        Memory = 2;
+        int NumShip = (int)PlayerField[X][Y] - 65;
+        HealthPlayerShip[NumShip] -= 1;
+        PlayerHP -= 1;
+        if (PlayerHP == 0) return 2;
+        PlayerField[X][Y] = '#';
+        CheckShotSeparator(PlayerField, X, Y);
+        if (HealthPlayerShip[NumShip] == 0) {
+          SetKillSeparators(NumShip, 2);
+          Memory = 0;
+        }
+        return 3;
+      }
+      else {
+        PlayerField[X][Y] = '*';
+        XodBot = 0;
+        return 0;
+      }
+    }
+  }
+  return 1;
+}
+
+int DirFindShotCoordintare() {
+  int Status = 1;
+  if (Status == 1) {
+    Status = DirShotCoordinate(XMem - 1, YMem);
+    if (Status == 2) return 2;
+    if (Status == 0) return 0;
+    if (Status == 3) {
+      DirMem = 1;
+      return 0;
+    }
+  }
+  if (Status == 1) {
+    Status = DirShotCoordinate(XMem + 1, YMem);
+    if (Status == 2) return 2;
+    if (Status == 0) return 0;
+    if (Status == 3) {
+      DirMem = 1;
+      return 0;
+    }
+  }
+  if (Status == 1) {
+    Status = DirShotCoordinate(XMem, YMem - 1);
+    if (Status == 2) return 2;
+    if (Status == 0) return 0;
+    if (Status == 3) {
+      DirMem = 2;
+      return 0;
+    }
+  }
+  if (Status == 1) {
+    Status = DirShotCoordinate(XMem, YMem + 1);
+    if (Status == 2) return 2;
+    if (Status == 0) return 0;
+    if (Status == 3) {
+      DirMem = 2;
+      return 0;
+    }
+  }
 }
 
 int FinishShotCoordinate() {

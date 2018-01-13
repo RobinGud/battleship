@@ -28,6 +28,10 @@ int main () {
     if (Memory == 0) {
       WinFlag = GenerateShotCoordinate();
     }
+    else if (Memory == 1) {
+      WinFlag = DirFindShotCoordintare();
+      OutPutField(PlayerField, EnemyField);
+    }
     else {
       WinFlag = FinishShotCoordinate();
     }
