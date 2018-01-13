@@ -12,12 +12,34 @@ int EnemyKillSeparatorsX[6][2];
 int EnemyKillSeparatorsY[6][2];
 int PlayerHP = 20;
 int EnemyHP = 20;
+int Memory = 0;
+int DirMem = 0;
+int XMem = 0;
+int YMem = 0;
+int WinFlag = 0;
+int XodBot = 0;
 
 int main () {
   LocationShip();
-  InputShotCoordinate();
-  OutPutField(PlayerShotsField, EnemyField);
+  while(WinFlag == 0) {
+    if (XodBot == 0) {
+      WinFlag = InputShotCoordinate();
+    }
+    if (Memory == 0) {
+      WinFlag = GenerateShotCoordinate();
+    }
+    else {
+      WinFlag = FinishShotCoordinate();
+    }
+  }
 
+  OutPutField(PlayerShotsField, EnemyField);
+  if (WinFlag == 1) {
+    printf("Good job! You Win!\n" );
+  }
+  else {
+    printf("Don't worry! You lost :(\n" );
+  }
   system ("pause");
   return 0;
 }

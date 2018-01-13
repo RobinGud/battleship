@@ -14,12 +14,18 @@ extern int EnemyKillSeparatorsX[6][2];
 extern int EnemyKillSeparatorsY[6][2];
 extern int PlayerHP;
 extern int EnemyHP;
+extern int Memory;
+extern int DirMem;
+extern int XMem;
+extern int YMem;
+extern int XodBot;
 
 int HealthPlayerShip[SIZE] = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
 int HealthEnemyShip[SIZE] = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
 
 void SetSeparator(char Field[SIZE][SIZE], int X, int Y);
 void OutPutField(char FirstField[SIZE][SIZE], char SecondField[SIZE][SIZE]);
+int RandomArray(int Array[SIZE]);
 
 void CheckShotSeparator(char Field[SIZE][SIZE], int X, int Y) {
   if (X - 1 >= 0 && Y + 1 < SIZE) {
@@ -69,7 +75,7 @@ void SetKillSeparators(int NumShip, int Side) {
   }
 }
 
-void InputShotCoordinate() {
+int InputShotCoordinate() {
   int X, Y, Status = 1;
   char charY;
   while (Status == 1) {
@@ -82,20 +88,66 @@ void InputShotCoordinate() {
       if (EnemyField[X][Y] != '0') {
         PlayerShotsField[X][Y] = '#';
         CheckShotSeparator(PlayerShotsField, X, Y);
-        int NumShip= (int)EnemyField[X][Y]-65;
+        int NumShip = (int)EnemyField[X][Y] - 65;
         HealthEnemyShip[NumShip] -= 1;
+        EnemyHP -= 1;
+        if (EnemyHP == 0) return 1;
         if (HealthEnemyShip[NumShip] == 0) {
           SetKillSeparators(NumShip, 1);
-          EnemyHP -=1;
         }
       }
       else {
         PlayerShotsField[X][Y] = '*';
+        Status = 0;
       }
-        OutPutField(PlayerShotsField, EnemyField);
+        OutPutField(PlayerField, EnemyField);
       }
     else {
       printf("Error. Try again.\n");
     }
+  }
+  return 0;
+}
+
+int GenerateShotCoordinate() {
+  int Y, X, Status = 1, Array[SIZE], i = SIZE;
+  while (Status == 1) {
+    i++;
+    if(i >= SIZE) {
+      RandomArray(Array);
+      i = 0;
+    }
+    X = Array[i];
+    Y = Array[i+1];
+    if (PlayerField[X][Y] == '*' || PlayerField[X][Y] == '#') {
+      continue;
+    }
+    else {
+      Status = 0;
+      if (PlayerField[X][Y] != '0') {
+        XodBot = 1;
+        Memory = 1;
+        int NumShip = (int)PlayerField[X][Y] - 65;
+        HealthPlayerShip[NumShip] -= 1;
+        PlayerHP -= 1;
+        if (PlayerHP == 0) return 2;
+        PlayerField[X][Y] = '#';
+        CheckShotSeparator(PlayerField, X, Y);
+        if (HealthPlayerShip[NumShip] == 0) {
+          SetKillSeparators(NumShip, 2);
+        }
+      }
+      else {
+        PlayerField[X][Y] = '*';
+        XodBot = 0;
+      }
     }
   }
+  OutPutField(PlayerField, EnemyField);
+  return 0;
+}
+
+int FinishShotCoordinate() {
+  printf("Finish Hit!\n" );
+  Memory = 0;
+}
