@@ -12,6 +12,8 @@ extern int PlayerKillSeparatorsY[6][2];
 extern int EnemyKillSmallSeparators[4][2];
 extern int EnemyKillSeparatorsX[6][2];
 extern int EnemyKillSeparatorsY[6][2];
+extern int EnemyHP;
+extern int PlayerHP;
 
 int LenShips[SIZE] = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
 char Alp[SIZE] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
@@ -33,7 +35,8 @@ void FillField(char Field[SIZE][SIZE]) {
 
 void OutPutField(char FirstField[SIZE][SIZE], char SecondField[SIZE][SIZE]) {
   system("clear");
-  printf("       Your Field                         Enemy Field\n" );
+  printf("-----------%d----------------------------------%d--------\n",PlayerHP, EnemyHP);
+  printf("       Your Field                         Enemy Field\n");
   printf("   ");
   for (int i = 0; i < SIZE; i++) {
     printf("%c ", Alp[i]);
@@ -253,7 +256,7 @@ void eoo(char Field[SIZE][SIZE]) {
       GenerateBigShip(Field, i);
     }
   }
-  OutPutField(PlayerField, EnemyField);
+  OutPutField(PlayerField, PlayerShotsField);
 }
 
 void LocationShip() {
@@ -265,5 +268,5 @@ void LocationShip() {
   eoo(EnemyField);
   ClearSeparators(PlayerField);
   ClearSeparators(EnemyField);
-  OutPutField(PlayerField, EnemyField);
+  OutPutField(PlayerField, PlayerShotsField);
 }

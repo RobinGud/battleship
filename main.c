@@ -24,20 +24,24 @@ int main () {
   while(WinFlag == 0) {
     if (XodBot == 0) {
       WinFlag = InputShotCoordinate();
+      OutPutField(PlayerField, PlayerShotsField);
     }
+    if (WinFlag == 1) break;
     if (Memory == 0) {
       WinFlag = GenerateShotCoordinate();
+      OutPutField(PlayerField, PlayerShotsField);
     }
     else if (Memory == 1) {
       WinFlag = DirFindShotCoordintare();
-      OutPutField(PlayerField, EnemyField);
+      OutPutField(PlayerField, PlayerShotsField);
     }
     else {
-      WinFlag = FinishShotCoordinate();
+      WinFlag = FindFinishShotCoordinate();
+      OutPutField(PlayerField, PlayerShotsField);
     }
   }
 
-  OutPutField(PlayerShotsField, EnemyField);
+  OutPutField(PlayerField, PlayerShotsField);
   if (WinFlag == 1) {
     printf("Good job! You Win!\n" );
   }

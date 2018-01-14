@@ -73,6 +73,36 @@ void SetKillSeparators(int NumShip, int Side) {
       }
     }
   }
+  if (Side == 2) {
+    if (NumShip < 6) {
+      int x1 = PlayerKillSeparatorsX[NumShip][0];
+      int x2 = PlayerKillSeparatorsX[NumShip][1];
+      int y1 = PlayerKillSeparatorsY[NumShip][0];
+      int y2 = PlayerKillSeparatorsY[NumShip][1];
+      if ((x1 >= 0) && (x1 < SIZE) && (y1 >= 0) && (y1 < SIZE)) {
+        PlayerField[x1][y1] = '*';
+      }
+      if ((x2 >= 0) && (x2 < SIZE) && (y2 >= 0) && (y2 < SIZE)) {
+        PlayerField[x2][y2] = '*';
+      }
+    }
+    else {
+      int x = PlayerKillSmallSeparators[NumShip - 6][0];
+      int y = PlayerKillSmallSeparators[NumShip - 6][1];
+      if (x - 1 >= 0) {
+        PlayerField[x - 1][y] = '*';
+      }
+      if (x + 1 < SIZE) {
+        PlayerField[x + 1][y] = '*';
+      }
+      if (y - 1 >= 0) {
+        PlayerField[x][y - 1] = '*';
+      }
+      if (y + 1 < SIZE) {
+        PlayerField[x][y + 1] = '*';
+      }
+    }
+  }
 }
 
 int InputShotCoordinate() {
@@ -83,7 +113,6 @@ int InputShotCoordinate() {
     scanf("%1c%1d", &charY, &X);
     fflush(stdin);
     Y = (int)charY - 97;
-    printf("%d %d\n", X, Y);
     if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE) && (PlayerShotsField[X][Y] != '#') && (PlayerShotsField[X][Y] != '*')) {
       if (EnemyField[X][Y] != '0') {
         PlayerShotsField[X][Y] = '#';
@@ -100,10 +129,11 @@ int InputShotCoordinate() {
         PlayerShotsField[X][Y] = '*';
         Status = 0;
       }
-        OutPutField(PlayerField, EnemyField);
-      }
+      OutPutField(PlayerField, PlayerShotsField);
+    }
     else {
-      printf("Error. Try again.\n");
+      OutPutField(PlayerField, PlayerShotsField);
+      printf("\nError. Try again.\n");
     }
   }
   return 0;
@@ -113,7 +143,7 @@ int GenerateShotCoordinate() {
   int Y, X, Status = 1, Array[SIZE], i = SIZE;
   while (Status == 1) {
     i++;
-    if(i >= SIZE) {
+    if (i >= SIZE) {
       RandomArray(Array);
       i = 0;
     }
@@ -134,6 +164,7 @@ int GenerateShotCoordinate() {
         PlayerHP -= 1;
         if (PlayerHP == 0) return 2;
         PlayerField[X][Y] = '#';
+        //OutPutField(PlayerField, EnemyField);
         CheckShotSeparator(PlayerField, X, Y);
         if (HealthPlayerShip[NumShip] == 0) {
           SetKillSeparators(NumShip, 2);
@@ -146,7 +177,7 @@ int GenerateShotCoordinate() {
       }
     }
   }
-  OutPutField(PlayerField, EnemyField);
+  //OutPutField(PlayerField, EnemyField);
   return 0;
 }
 
@@ -218,7 +249,59 @@ int DirFindShotCoordintare() {
   }
 }
 
-int FinishShotCoordinate() {
-  printf("Finish Hit!\n" );
-  Memory = 0;
+int FinishShotCoordinate(int X, int Y) {
+  if (PlayerField[X][Y] != '#') {
+    if (PlayerField[X][Y] != '0') {
+      XodBot = 1;
+      int NumShip = (int)PlayerField[X][Y] - 65;
+      HealthPlayerShip[NumShip] -= 1;
+      PlayerHP -= 1;
+      if (PlayerHP == 0) return 2;
+      PlayerField[X][Y] = '#';
+      CheckShotSeparator(PlayerField, X, Y);
+      if (HealthPlayerShip[NumShip] == 0) {
+        SetKillSeparators(NumShip, 2);
+        Memory = 0;
+      }
+      return 0;
+    }
+    else {
+      PlayerField[X][Y] = '*';
+      XodBot = 0;
+      return 0;
+    }
+  }
+  return 1;
+}
+
+int FindFinishShotCoordinate() {
+  int X = XMem, Y = YMem, Status = 1;
+  if (DirMem == 1) {
+    while (X - 1 >= 0 && Status == 1) {
+     if (PlayerField[X - 1][Y] == '*') break;
+      X--;
+      Status = FinishShotCoordinate(X, Y);
+    }
+    X = XMem;
+    while (X + 1 < SIZE && Status == 1) {
+      if (PlayerField[X + 1][Y] == '*') break;
+      X++;
+      Status = FinishShotCoordinate(X, Y);
+    }
+  }
+  else if (DirMem == 2) {
+    while (Y - 1 >= 0 && Status == 1) {
+      if (PlayerField[X][Y - 1] == '*') break;
+      Y--;
+      Status = FinishShotCoordinate(X, Y);
+    }
+    Y = YMem;
+    while (Y + 1 < SIZE && Status == 1) {
+      if (PlayerField[X][Y + 1] == '*') break;
+      Y++;
+      Status = FinishShotCoordinate(X, Y);
+    }
+  }
+  if (Status == 2) return 2;
+  return 0;
 }
