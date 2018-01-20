@@ -18,6 +18,8 @@ extern int PlayerHP;
 int LenShips[SIZE] = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
 char Alp[SIZE] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
 
+int CheckEdge (int X, int Y);
+
 int RandomArray(int Array[SIZE]) {
     srand(time(NULL));
     for (int i = 0; i < SIZE; i++) {
@@ -68,28 +70,28 @@ void SetSeparator(char Field[SIZE][SIZE], int X, int Y) {
 }
 
 void CheckSeparator(char Field[SIZE][SIZE], int X, int Y) {
-  if (X - 1 >= 0 && Y + 1 < SIZE) {
+  if (CheckEdge(X - 1, Y + 1)) {
     SetSeparator(Field, X - 1, Y + 1);
   };
-  if (Y + 1 < SIZE) {
+  if (CheckEdge(X, Y + 1)) {
     SetSeparator(Field, X, Y + 1);
   };
-  if (X + 1 < SIZE && Y + 1 < SIZE) {
+  if (CheckEdge(X + 1, Y + 1)) {
     SetSeparator(Field, X + 1, Y + 1);
   };
-  if (X - 1 >= 0) {
+  if (CheckEdge(X - 1, Y)) {
     SetSeparator(Field, X - 1, Y);
   };
-  if (X + 1 < SIZE) {
+  if (CheckEdge(X + 1, Y)) {
     SetSeparator(Field, X + 1, Y);
   };
-  if (X - 1 >= 0 && Y - 1 >= 0) {
+  if (CheckEdge(X - 1, Y - 1)) {
     SetSeparator(Field, X - 1, Y - 1);
   };
-  if (Y - 1 >= 0) {
+  if (CheckEdge(X, Y - 1)) {
     SetSeparator(Field, X, Y - 1);
   };
-  if (X + 1 < SIZE && Y - 1 >= 0) {
+  if (CheckEdge(X + 1, Y - 1)) {
     SetSeparator(Field, X + 1, Y - 1);
   };
 }
@@ -156,9 +158,9 @@ void SetBigShip(char Field[SIZE][SIZE], int NumShip) {
       scanf("%1c%1d%1c", &charY, &X, &Direction);
       fflush(stdin);
       Y = (int)charY - 97;
-      if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE) && (Direction == 'h'))
+      if (CheckEdge(X, Y) && (Direction == 'h'))
         Status = SetHorizontalShip(Field, X, Y, NumShip, 1);
-      if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE) && (Direction == 'v'))
+      if (CheckEdge(X, Y) && (Direction == 'v'))
         Status = SetVerticalShip(Field, X, Y, NumShip, 1);
       if (Status == 1)
         printf("Error. Try again.\n");
@@ -173,7 +175,7 @@ void SetSmallShip(char Field[SIZE][SIZE],int NumShip) {
     scanf("%1c%1d", &charY, &X);
     fflush(stdin);
     Y = (int)charY - 97;
-    if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE) && (PlayerField[X][Y] == '0')) {
+    if (CheckEdge(X, Y) && (PlayerField[X][Y] == '0')) {
       PlayerField[X][Y] = Alp[NumShip];
       PlayerKillSmallSeparators[NumShip - 6][0] = X;
       PlayerKillSmallSeparators[NumShip - 6][1] = Y;
@@ -196,9 +198,9 @@ void GenerateBigShip(char Field[SIZE][SIZE], int NumShip) {
     X = Array[i];
     Y = Array[i + 1];
     Direction = Array[i] % 2;
-    if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE) && (Direction == 0))
+    if (CheckEdge(X, Y) && (Direction == 0))
       Status = SetHorizontalShip(Field, X, Y, NumShip, 2);
-    if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE) && (Direction == 1))
+    if (CheckEdge(X, Y) && (Direction == 1))
       Status = SetVerticalShip(Field, X, Y, NumShip, 2);
   }
 }
@@ -213,7 +215,7 @@ void GenerateSmallShip(char Field[SIZE][SIZE],int NumShip) {
     }
     X = Array[i];
     Y = Array[i+1];
-    if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE) && (EnemyField[X][Y] == '0')) {
+    if (CheckEdge(X, Y) && (EnemyField[X][Y] == '0')) {
       EnemyField[X][Y] = Alp[NumShip];
       EnemyKillSmallSeparators[NumShip - 6][0] = X;
       EnemyKillSmallSeparators[NumShip - 6][1] = Y;

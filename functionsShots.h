@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
 #define SIZE 10
 
 extern char PlayerField[SIZE][SIZE];
@@ -27,17 +28,26 @@ void SetSeparator(char Field[SIZE][SIZE], int X, int Y);
 void OutPutField(char FirstField[SIZE][SIZE], char SecondField[SIZE][SIZE]);
 int RandomArray(int Array[SIZE]);
 
+int CheckEdge (int X, int Y) {
+   if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE)) {
+     return true;
+   }
+   else {
+     return false;
+   }
+}
+
 void CheckShotSeparator(char Field[SIZE][SIZE], int X, int Y) {
-  if (X - 1 >= 0 && Y + 1 < SIZE) {
+  if (CheckEdge(X - 1, Y + 1)) {
     SetSeparator(Field, X - 1, Y + 1);
   };
-  if (X + 1 < SIZE && Y + 1 < SIZE) {
+  if (CheckEdge(X + 1, Y + 1)) {
     SetSeparator(Field, X + 1, Y + 1);
   };
-  if (X - 1 >= 0 && Y - 1 >= 0) {
+  if (CheckEdge(X - 1, Y - 1)) {
     SetSeparator(Field, X - 1, Y - 1);
   };
-  if (X + 1 < SIZE && Y - 1 >= 0) {
+  if (CheckEdge(X + 1, Y - 1)) {
     SetSeparator(Field, X + 1, Y - 1);
   };
 }
@@ -45,61 +55,61 @@ void CheckShotSeparator(char Field[SIZE][SIZE], int X, int Y) {
 void SetKillSeparators(int NumShip, int Side) {
   if (Side == 1) {
     if (NumShip < 6) {
-      int x1 = EnemyKillSeparatorsX[NumShip][0];
-      int x2 = EnemyKillSeparatorsX[NumShip][1];
-      int y1 = EnemyKillSeparatorsY[NumShip][0];
-      int y2 = EnemyKillSeparatorsY[NumShip][1];
-      if ((x1 >= 0) && (x1 < SIZE) && (y1 >= 0) && (y1 < SIZE)) {
-        PlayerShotsField[x1][y1] = '*';
+      int X1 = EnemyKillSeparatorsX[NumShip][0];
+      int X2 = EnemyKillSeparatorsX[NumShip][1];
+      int Y1 = EnemyKillSeparatorsY[NumShip][0];
+      int Y2 = EnemyKillSeparatorsY[NumShip][1];
+      if (CheckEdge(X1, Y1)) {
+        PlayerShotsField[X1][Y1] = '*';
       }
-      if ((x2 >= 0) && (x2 < SIZE) && (y2 >= 0) && (y2 < SIZE)) {
-        PlayerShotsField[x2][y2] = '*';
+      if (CheckEdge(X2, Y2)) {
+        PlayerShotsField[X2][Y2] = '*';
       }
     }
     else {
-      int x = EnemyKillSmallSeparators[NumShip - 6][0];
-      int y = EnemyKillSmallSeparators[NumShip - 6][1];
-      if (x - 1 >= 0) {
-        PlayerShotsField[x - 1][y] = '*';
+      int X = EnemyKillSmallSeparators[NumShip - 6][0];
+      int Y = EnemyKillSmallSeparators[NumShip - 6][1];
+      if (CheckEdge(X - 1, Y)) {
+        PlayerShotsField[X - 1][Y] = '*';
       }
-      if (x + 1 < SIZE) {
-        PlayerShotsField[x + 1][y] = '*';
+      if (CheckEdge(X + 1, Y)) {
+        PlayerShotsField[X + 1][Y] = '*';
       }
-      if (y - 1 >= 0) {
-        PlayerShotsField[x][y - 1] = '*';
+      if (CheckEdge(X, Y - 1)) {
+        PlayerShotsField[X][Y - 1] = '*';
       }
-      if (y + 1 < SIZE) {
-        PlayerShotsField[x][y + 1] = '*';
+      if (CheckEdge(X, Y + 1)) {
+        PlayerShotsField[X][Y + 1] = '*';
       }
     }
   }
   if (Side == 2) {
     if (NumShip < 6) {
-      int x1 = PlayerKillSeparatorsX[NumShip][0];
-      int x2 = PlayerKillSeparatorsX[NumShip][1];
-      int y1 = PlayerKillSeparatorsY[NumShip][0];
-      int y2 = PlayerKillSeparatorsY[NumShip][1];
-      if ((x1 >= 0) && (x1 < SIZE) && (y1 >= 0) && (y1 < SIZE)) {
-        PlayerField[x1][y1] = '*';
+      int X1 = PlayerKillSeparatorsX[NumShip][0];
+      int X2 = PlayerKillSeparatorsX[NumShip][1];
+      int Y1 = PlayerKillSeparatorsY[NumShip][0];
+      int Y2 = PlayerKillSeparatorsY[NumShip][1];
+      if (CheckEdge(X1, Y1)) {
+        PlayerField[X1][Y1] = '*';
       }
-      if ((x2 >= 0) && (x2 < SIZE) && (y2 >= 0) && (y2 < SIZE)) {
-        PlayerField[x2][y2] = '*';
+      if (CheckEdge(X2, Y2)) {
+        PlayerField[X2][Y2] = '*';
       }
     }
     else {
-      int x = PlayerKillSmallSeparators[NumShip - 6][0];
-      int y = PlayerKillSmallSeparators[NumShip - 6][1];
-      if (x - 1 >= 0) {
-        PlayerField[x - 1][y] = '*';
+      int X = PlayerKillSmallSeparators[NumShip - 6][0];
+      int Y = PlayerKillSmallSeparators[NumShip - 6][1];
+      if (CheckEdge(X - 1, Y)) {
+        PlayerField[X - 1][Y] = '*';
       }
-      if (x + 1 < SIZE) {
-        PlayerField[x + 1][y] = '*';
+      if (CheckEdge(X + 1, Y)) {
+        PlayerField[X + 1][Y] = '*';
       }
-      if (y - 1 >= 0) {
-        PlayerField[x][y - 1] = '*';
+      if (CheckEdge(X, Y - 1)) {
+        PlayerField[X][Y - 1] = '*';
       }
-      if (y + 1 < SIZE) {
-        PlayerField[x][y + 1] = '*';
+      if (CheckEdge(X, Y + 1)) {
+        PlayerField[X][Y + 1] = '*';
       }
     }
   }
@@ -113,7 +123,7 @@ int InputShotCoordinate() {
     scanf("%1c%1d", &charY, &X);
     fflush(stdin);
     Y = (int)charY - 97;
-    if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE) && (PlayerShotsField[X][Y] != '#') && (PlayerShotsField[X][Y] != '*')) {
+    if (CheckEdge(X, Y) && (PlayerShotsField[X][Y] != '#') && (PlayerShotsField[X][Y] != '*')) {
       if (EnemyField[X][Y] != '0') {
         PlayerShotsField[X][Y] = '#';
         CheckShotSeparator(PlayerShotsField, X, Y);
@@ -182,7 +192,7 @@ int GenerateShotCoordinate() {
 }
 
 int DirShotCoordinate(int X, int Y) {
-  if (X < SIZE && X >= 0 && Y < SIZE && Y >= 0) {
+  if (CheckEdge(X, Y)) {
     if (PlayerField[X][Y] != '*') {
       if (PlayerField[X][Y] != '0') {
         XodBot = 1;
@@ -277,26 +287,26 @@ int FinishShotCoordinate(int X, int Y) {
 int FindFinishShotCoordinate() {
   int X = XMem, Y = YMem, Status = 1;
   if (DirMem == 1) {
-    while (X - 1 >= 0 && Status == 1) {
+    while (CheckEdge(X - 1, Y) && Status == 1) {
      if (PlayerField[X - 1][Y] == '*') break;
       X--;
       Status = FinishShotCoordinate(X, Y);
     }
     X = XMem;
-    while (X + 1 < SIZE && Status == 1) {
+    while (CheckEdge(X + 1, Y) && Status == 1) {
       if (PlayerField[X + 1][Y] == '*') break;
       X++;
       Status = FinishShotCoordinate(X, Y);
     }
   }
   else if (DirMem == 2) {
-    while (Y - 1 >= 0 && Status == 1) {
+    while (CheckEdge(X, Y - 1) && Status == 1) {
       if (PlayerField[X][Y - 1] == '*') break;
       Y--;
       Status = FinishShotCoordinate(X, Y);
     }
     Y = YMem;
-    while (Y + 1 < SIZE && Status == 1) {
+    while (CheckEdge(X, Y + 1) && Status == 1) {
       if (PlayerField[X][Y + 1] == '*') break;
       Y++;
       Status = FinishShotCoordinate(X, Y);
