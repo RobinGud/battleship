@@ -24,21 +24,18 @@ int main () {
   while(WinFlag == false) {
     if (XodBot == 0) {
       WinFlag = InputShotCoordinate();
-      OutPutField(PlayerField, PlayerShotsField);
     }
     if (WinFlag == true) break;
     if (Memory == 0) {
       WinFlag = GenerateShotCoordinate();
-      OutPutField(PlayerField, PlayerShotsField);
     }
     else if (Memory == 1) {
       WinFlag = DirFindShotCoordintare();
-      OutPutField(PlayerField, PlayerShotsField);
     }
     else {
       WinFlag = FindFinishShotCoordinate();
-      OutPutField(PlayerField, PlayerShotsField);
     }
+    OutPutField(PlayerField, PlayerShotsField);
   }
 
   OutPutField(PlayerField, PlayerShotsField);
