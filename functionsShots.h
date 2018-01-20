@@ -3,6 +3,7 @@
 #include <time.h>
 #include <stdbool.h>
 #define SIZE 10
+#define MAGICNUMBER 65
 
 extern char PlayerField[SIZE][SIZE];
 extern char PlayerShotsField[SIZE][SIZE];
@@ -127,7 +128,7 @@ int InputShotCoordinate() {
       if (EnemyField[X][Y] != '0') {
         PlayerShotsField[X][Y] = '#';
         CheckShotSeparator(PlayerShotsField, X, Y);
-        int NumShip = (int)EnemyField[X][Y] - 65;
+        int NumShip = (int)EnemyField[X][Y] - MAGICNUMBER;
         HealthEnemyShip[NumShip] -= 1;
         EnemyHP -= 1;
         if (EnemyHP == 0) return 1;
@@ -169,7 +170,7 @@ int GenerateShotCoordinate() {
         Memory = 1;
         XMem = X;
         YMem = Y;
-        int NumShip = (int)PlayerField[X][Y] - 65;
+        int NumShip = (int)PlayerField[X][Y] - MAGICNUMBER;
         HealthPlayerShip[NumShip] -= 1;
         PlayerHP -= 1;
         if (PlayerHP == 0) return 2;
@@ -197,7 +198,7 @@ int DirShotCoordinate(int X, int Y) {
       if (PlayerField[X][Y] != '0') {
         XodBot = 1;
         Memory = 2;
-        int NumShip = (int)PlayerField[X][Y] - 65;
+        int NumShip = (int)PlayerField[X][Y] - MAGICNUMBER;
         HealthPlayerShip[NumShip] -= 1;
         PlayerHP -= 1;
         if (PlayerHP == 0) return 2;
@@ -263,7 +264,7 @@ int FinishShotCoordinate(int X, int Y) {
   if (PlayerField[X][Y] != '#') {
     if (PlayerField[X][Y] != '0') {
       XodBot = 1;
-      int NumShip = (int)PlayerField[X][Y] - 65;
+      int NumShip = (int)PlayerField[X][Y] - MAGICNUMBER;
       HealthPlayerShip[NumShip] -= 1;
       PlayerHP -= 1;
       if (PlayerHP == 0) return 2;
