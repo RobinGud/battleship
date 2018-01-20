@@ -224,40 +224,25 @@ int DirFindShotCoordintare() {
   int Status = 1;
   if (Status == 1) {
     Status = DirShotCoordinate(XMem - 1, YMem);
-    if (Status == 2) return 2;
-    if (Status == 0) return 0;
-    if (Status == 3) {
-      DirMem = 1;
-      return 0;
-    }
   }
   if (Status == 1) {
     Status = DirShotCoordinate(XMem + 1, YMem);
-    if (Status == 2) return 2;
-    if (Status == 0) return 0;
-    if (Status == 3) {
-      DirMem = 1;
-      return 0;
-    }
+  }
+  if (Status == 3) {
+    DirMem = 1;
   }
   if (Status == 1) {
     Status = DirShotCoordinate(XMem, YMem - 1);
-    if (Status == 2) return 2;
-    if (Status == 0) return 0;
-    if (Status == 3) {
-      DirMem = 2;
-      return 0;
-    }
   }
   if (Status == 1) {
     Status = DirShotCoordinate(XMem, YMem + 1);
-    if (Status == 2) return 2;
-    if (Status == 0) return 0;
-    if (Status == 3) {
-      DirMem = 2;
-      return 0;
-    }
   }
+  if (Status == 3) {
+    DirMem = 2;
+  }
+  if (Status == 2) return 2;
+  if (Status == 0) return 0;
+  if (Status == 3) return 0;
 }
 
 int FinishShotCoordinate(int X, int Y) {
