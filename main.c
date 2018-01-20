@@ -21,12 +21,12 @@ int XodBot = 0;
 
 int main () {
   LocationShip();
-  while(WinFlag == 0) {
+  while(WinFlag == false) {
     if (XodBot == 0) {
       WinFlag = InputShotCoordinate();
       OutPutField(PlayerField, PlayerShotsField);
     }
-    if (WinFlag == 1) break;
+    if (WinFlag == true) break;
     if (Memory == 0) {
       WinFlag = GenerateShotCoordinate();
       OutPutField(PlayerField, PlayerShotsField);
@@ -42,7 +42,7 @@ int main () {
   }
 
   OutPutField(PlayerField, PlayerShotsField);
-  if (WinFlag == 1) {
+  if (WinFlag == true) {
     printf("Good job! You Win!\n" );
   }
   else {
