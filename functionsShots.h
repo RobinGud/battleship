@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #define SIZE 10
 #define MAGICNUMBER 65
+#define POPAL '#'
+#define PROMAX '*'
 
 enum MEM {
   MEM_VOID,
@@ -72,26 +74,26 @@ void SetKillSeparators(int NumShip, enum SIDE Side) {
       int Y1 = EnemyKillSeparatorsY[NumShip][0];
       int Y2 = EnemyKillSeparatorsY[NumShip][1];
       if (CheckEdge(X1, Y1)) {
-        PlayerShotsField[X1][Y1] = '*';
+        PlayerShotsField[X1][Y1] = PROMAX;
       }
       if (CheckEdge(X2, Y2)) {
-        PlayerShotsField[X2][Y2] = '*';
+        PlayerShotsField[X2][Y2] = PROMAX;
       }
     }
     else {
       int X = EnemyKillSmallSeparators[NumShip - 6][0];
       int Y = EnemyKillSmallSeparators[NumShip - 6][1];
       if (CheckEdge(X - 1, Y)) {
-        PlayerShotsField[X - 1][Y] = '*';
+        PlayerShotsField[X - 1][Y] = PROMAX;
       }
       if (CheckEdge(X + 1, Y)) {
-        PlayerShotsField[X + 1][Y] = '*';
+        PlayerShotsField[X + 1][Y] = PROMAX;
       }
       if (CheckEdge(X, Y - 1)) {
-        PlayerShotsField[X][Y - 1] = '*';
+        PlayerShotsField[X][Y - 1] = PROMAX;
       }
       if (CheckEdge(X, Y + 1)) {
-        PlayerShotsField[X][Y + 1] = '*';
+        PlayerShotsField[X][Y + 1] = PROMAX;
       }
     }
   }
@@ -102,26 +104,26 @@ void SetKillSeparators(int NumShip, enum SIDE Side) {
       int Y1 = PlayerKillSeparatorsY[NumShip][0];
       int Y2 = PlayerKillSeparatorsY[NumShip][1];
       if (CheckEdge(X1, Y1)) {
-        PlayerField[X1][Y1] = '*';
+        PlayerField[X1][Y1] = PROMAX;
       }
       if (CheckEdge(X2, Y2)) {
-        PlayerField[X2][Y2] = '*';
+        PlayerField[X2][Y2] = PROMAX;
       }
     }
     else {
       int X = PlayerKillSmallSeparators[NumShip - 6][0];
       int Y = PlayerKillSmallSeparators[NumShip - 6][1];
       if (CheckEdge(X - 1, Y)) {
-        PlayerField[X - 1][Y] = '*';
+        PlayerField[X - 1][Y] = PROMAX;
       }
       if (CheckEdge(X + 1, Y)) {
-        PlayerField[X + 1][Y] = '*';
+        PlayerField[X + 1][Y] = PROMAX;
       }
       if (CheckEdge(X, Y - 1)) {
-        PlayerField[X][Y - 1] = '*';
+        PlayerField[X][Y - 1] = PROMAX;
       }
       if (CheckEdge(X, Y + 1)) {
-        PlayerField[X][Y + 1] = '*';
+        PlayerField[X][Y + 1] = PROMAX;
       }
     }
   }
@@ -135,9 +137,9 @@ int InputShotCoordinate() {
     scanf("%1c%1d", &charY, &X);
     fflush(stdin);
     Y = (int)charY - 97;
-    if (CheckEdge(X, Y) && (PlayerShotsField[X][Y] != '#') && (PlayerShotsField[X][Y] != '*')) {
+    if (CheckEdge(X, Y) && (PlayerShotsField[X][Y] != POPAL) && (PlayerShotsField[X][Y] != PROMAX)) {
       if (EnemyField[X][Y] != '0') {
-        PlayerShotsField[X][Y] = '#';
+        PlayerShotsField[X][Y] = POPAL;
         CheckShotSeparator(PlayerShotsField, X, Y);
         int NumShip = (int)EnemyField[X][Y] - MAGICNUMBER;
         HealthEnemyShip[NumShip] -= 1;
@@ -148,7 +150,7 @@ int InputShotCoordinate() {
         }
       }
       else {
-        PlayerShotsField[X][Y] = '*';
+        PlayerShotsField[X][Y] = PROMAX;
         Status = 0;
       }
       OutPutField(PlayerField, PlayerShotsField);
@@ -171,7 +173,7 @@ int GenerateShotCoordinate() {
     }
     X = Array[i];
     Y = Array[i - 1];
-    if (PlayerField[X][Y] == '*' || PlayerField[X][Y] == '#') {
+    if (PlayerField[X][Y] == PROMAX || PlayerField[X][Y] == POPAL) {
       continue;
     }
     else {
@@ -185,7 +187,7 @@ int GenerateShotCoordinate() {
         HealthPlayerShip[NumShip] -= 1;
         PlayerHP -= 1;
         if (PlayerHP == 0) return 2;
-        PlayerField[X][Y] = '#';
+        PlayerField[X][Y] = POPAL;
         //OutPutField(PlayerField, EnemyField);
         CheckShotSeparator(PlayerField, X, Y);
         if (HealthPlayerShip[NumShip] == 0) {
@@ -194,7 +196,7 @@ int GenerateShotCoordinate() {
         }
       }
       else {
-        PlayerField[X][Y] = '*';
+        PlayerField[X][Y] = PROMAX;
         XodBot = 0;
       }
     }
@@ -205,7 +207,7 @@ int GenerateShotCoordinate() {
 
 int DirShotCoordinate(int X, int Y) {
   if (CheckEdge(X, Y)) {
-    if (PlayerField[X][Y] != '*') {
+    if (PlayerField[X][Y] != PROMAX) {
       if (PlayerField[X][Y] != '0') {
         XodBot = 1;
         Memory = MEM_DIRECTION;
@@ -213,7 +215,7 @@ int DirShotCoordinate(int X, int Y) {
         HealthPlayerShip[NumShip] -= 1;
         PlayerHP -= 1;
         if (PlayerHP == 0) return 2;
-        PlayerField[X][Y] = '#';
+        PlayerField[X][Y] = POPAL;
         CheckShotSeparator(PlayerField, X, Y);
         if (HealthPlayerShip[NumShip] == 0) {
           SetKillSeparators(NumShip, SIDE_ENEMY);
@@ -222,7 +224,7 @@ int DirShotCoordinate(int X, int Y) {
         return 3;
       }
       else {
-        PlayerField[X][Y] = '*';
+        PlayerField[X][Y] = PROMAX;
         XodBot = 0;
         return 0;
       }
@@ -256,14 +258,14 @@ int DirFindShotCoordintare() {
 }
 
 int FinishShotCoordinate(int X, int Y) {
-  if (PlayerField[X][Y] != '#') {
+  if (PlayerField[X][Y] != POPAL) {
     if (PlayerField[X][Y] != '0') {
       XodBot = 1;
       int NumShip = (int)PlayerField[X][Y] - MAGICNUMBER;
       HealthPlayerShip[NumShip] -= 1;
       PlayerHP -= 1;
       if (PlayerHP == 0) return 2;
-      PlayerField[X][Y] = '#';
+      PlayerField[X][Y] = POPAL;
       CheckShotSeparator(PlayerField, X, Y);
       if (HealthPlayerShip[NumShip] == 0) {
         SetKillSeparators(NumShip, SIDE_ENEMY);
@@ -272,7 +274,7 @@ int FinishShotCoordinate(int X, int Y) {
       return 0;
     }
     else {
-      PlayerField[X][Y] = '*';
+      PlayerField[X][Y] = PROMAX;
       XodBot = 0;
       return 0;
     }
@@ -284,26 +286,26 @@ int FindFinishShotCoordinate() {
   int X = XMem, Y = YMem, Status = 1;
   if (DirMem == 1) {
     while (CheckEdge(X - 1, Y) && Status == 1) {
-     if (PlayerField[X - 1][Y] == '*') break;
+     if (PlayerField[X - 1][Y] == PROMAX) break;
       X--;
       Status = FinishShotCoordinate(X, Y);
     }
     X = XMem;
     while (CheckEdge(X + 1, Y) && Status == 1) {
-      if (PlayerField[X + 1][Y] == '*') break;
+      if (PlayerField[X + 1][Y] == PROMAX) break;
       X++;
       Status = FinishShotCoordinate(X, Y);
     }
   }
   else if (DirMem == 2) {
     while (CheckEdge(X, Y - 1) && Status == 1) {
-      if (PlayerField[X][Y - 1] == '*') break;
+      if (PlayerField[X][Y - 1] == PROMAX) break;
       Y--;
       Status = FinishShotCoordinate(X, Y);
     }
     Y = YMem;
     while (CheckEdge(X, Y + 1) && Status == 1) {
-      if (PlayerField[X][Y + 1] == '*') break;
+      if (PlayerField[X][Y + 1] == PROMAX) break;
       Y++;
       Status = FinishShotCoordinate(X, Y);
     }
