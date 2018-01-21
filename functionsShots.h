@@ -11,6 +11,11 @@ enum MEM {
   MEM_DIRECTION
 };
 
+enum SIDE {
+  SIDE_PLAYER = 1,
+  SIDE_ENEMY = 2
+};
+
 extern char PlayerField[SIZE][SIZE];
 extern char PlayerShotsField[SIZE][SIZE];
 extern char EnemyField[SIZE][SIZE];
@@ -59,8 +64,8 @@ void CheckShotSeparator(char Field[SIZE][SIZE], int X, int Y) {
   };
 }
 
-void SetKillSeparators(int NumShip, int Side) {
-  if (Side == 1) {
+void SetKillSeparators(int NumShip, enum SIDE Side) {
+  if (Side == SIDE_PLAYER) {
     if (NumShip < 6) {
       int X1 = EnemyKillSeparatorsX[NumShip][0];
       int X2 = EnemyKillSeparatorsX[NumShip][1];
@@ -90,7 +95,7 @@ void SetKillSeparators(int NumShip, int Side) {
       }
     }
   }
-  if (Side == 2) {
+  if (Side == SIDE_ENEMY) {
     if (NumShip < 6) {
       int X1 = PlayerKillSeparatorsX[NumShip][0];
       int X2 = PlayerKillSeparatorsX[NumShip][1];
@@ -139,7 +144,7 @@ int InputShotCoordinate() {
         EnemyHP -= 1;
         if (EnemyHP == 0) return 1;
         if (HealthEnemyShip[NumShip] == 0) {
-          SetKillSeparators(NumShip, 1);
+          SetKillSeparators(NumShip, SIDE_PLAYER);
         }
       }
       else {
@@ -184,7 +189,7 @@ int GenerateShotCoordinate() {
         //OutPutField(PlayerField, EnemyField);
         CheckShotSeparator(PlayerField, X, Y);
         if (HealthPlayerShip[NumShip] == 0) {
-          SetKillSeparators(NumShip, 2);
+          SetKillSeparators(NumShip, SIDE_ENEMY);
           Memory = MEM_VOID;
         }
       }
@@ -211,7 +216,7 @@ int DirShotCoordinate(int X, int Y) {
         PlayerField[X][Y] = '#';
         CheckShotSeparator(PlayerField, X, Y);
         if (HealthPlayerShip[NumShip] == 0) {
-          SetKillSeparators(NumShip, 2);
+          SetKillSeparators(NumShip, SIDE_ENEMY);
           Memory = MEM_VOID;
         }
         return 3;
@@ -261,7 +266,7 @@ int FinishShotCoordinate(int X, int Y) {
       PlayerField[X][Y] = '#';
       CheckShotSeparator(PlayerField, X, Y);
       if (HealthPlayerShip[NumShip] == 0) {
-        SetKillSeparators(NumShip, 2);
+        SetKillSeparators(NumShip, SIDE_ENEMY);
         Memory = MEM_VOID;
       }
       return 0;
