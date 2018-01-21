@@ -193,10 +193,10 @@ void GenerateBigShip(char Field[SIZE][SIZE], int NumShip) {
     i++;
     if (i >= SIZE - 1) {
       RandomArray(Array);
-      i = 0;
+      i = 1;
     }
     X = Array[i];
-    Y = Array[i + 1];
+    Y = Array[i - 1];
     Direction = Array[i] % 2;
     if (CheckEdge(X, Y) && (Direction == 0))
       Status = SetHorizontalShip(Field, X, Y, NumShip, 2);
@@ -211,10 +211,10 @@ void GenerateSmallShip(char Field[SIZE][SIZE],int NumShip) {
     i++;
     if (i >= SIZE) {
       RandomArray(Array);
-      i = 0;
+      i = 1;
     }
     X = Array[i];
-    Y = Array[i+1];
+    Y = Array[i - 1];
     if (CheckEdge(X, Y) && (EnemyField[X][Y] == '0')) {
       EnemyField[X][Y] = Alp[NumShip];
       EnemyKillSmallSeparators[NumShip - 6][0] = X;

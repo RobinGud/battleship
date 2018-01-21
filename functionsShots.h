@@ -156,10 +156,10 @@ int GenerateShotCoordinate() {
     i++;
     if (i >= SIZE) {
       RandomArray(Array);
-      i = 0;
+      i = 1;
     }
     X = Array[i];
-    Y = Array[i+1];
+    Y = Array[i - 1];
     if (PlayerField[X][Y] == '*' || PlayerField[X][Y] == '#') {
       continue;
     }
@@ -241,8 +241,7 @@ int DirFindShotCoordintare() {
     DirMem = 2;
   }
   if (Status == 2) return 2;
-  if (Status == 0) return 0;
-  if (Status == 3) return 0;
+  if (Status == 0 || Status == 3) return 0;
 }
 
 int FinishShotCoordinate(int X, int Y) {
