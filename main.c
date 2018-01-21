@@ -12,7 +12,7 @@ int EnemyKillSeparatorsX[6][2];
 int EnemyKillSeparatorsY[6][2];
 int PlayerHP = 20;
 int EnemyHP = 20;
-int Memory = 0;
+enum MEM Memory = MEM_VOID;
 int DirMem = 0;
 int XMem = 0;
 int YMem = 0;
@@ -26,10 +26,10 @@ int main () {
       WinFlag = InputShotCoordinate();
     }
     if (WinFlag == true) break;
-    if (Memory == 0) {
+    if (Memory == MEM_VOID) {
       WinFlag = GenerateShotCoordinate();
     }
-    else if (Memory == 1) {
+    else if (Memory == MEM_POINT) {
       WinFlag = DirFindShotCoordintare();
     }
     else {

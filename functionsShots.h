@@ -5,6 +5,12 @@
 #define SIZE 10
 #define MAGICNUMBER 65
 
+enum MEM {
+  MEM_VOID,
+  MEM_POINT,
+  MEM_DIRECTION
+};
+
 extern char PlayerField[SIZE][SIZE];
 extern char PlayerShotsField[SIZE][SIZE];
 extern char EnemyField[SIZE][SIZE];
@@ -16,7 +22,7 @@ extern int EnemyKillSeparatorsX[6][2];
 extern int EnemyKillSeparatorsY[6][2];
 extern int PlayerHP;
 extern int EnemyHP;
-extern int Memory;
+extern enum MEM Memory;
 extern int DirMem;
 extern int XMem;
 extern int YMem;
@@ -167,7 +173,7 @@ int GenerateShotCoordinate() {
       Status = 0;
       if (PlayerField[X][Y] != '0') {
         XodBot = 1;
-        Memory = 1;
+        Memory = MEM_POINT;
         XMem = X;
         YMem = Y;
         int NumShip = (int)PlayerField[X][Y] - MAGICNUMBER;
@@ -179,7 +185,7 @@ int GenerateShotCoordinate() {
         CheckShotSeparator(PlayerField, X, Y);
         if (HealthPlayerShip[NumShip] == 0) {
           SetKillSeparators(NumShip, 2);
-          Memory = 0;
+          Memory = MEM_VOID;
         }
       }
       else {
@@ -197,7 +203,7 @@ int DirShotCoordinate(int X, int Y) {
     if (PlayerField[X][Y] != '*') {
       if (PlayerField[X][Y] != '0') {
         XodBot = 1;
-        Memory = 2;
+        Memory = MEM_DIRECTION;
         int NumShip = (int)PlayerField[X][Y] - MAGICNUMBER;
         HealthPlayerShip[NumShip] -= 1;
         PlayerHP -= 1;
@@ -206,7 +212,7 @@ int DirShotCoordinate(int X, int Y) {
         CheckShotSeparator(PlayerField, X, Y);
         if (HealthPlayerShip[NumShip] == 0) {
           SetKillSeparators(NumShip, 2);
-          Memory = 0;
+          Memory = MEM_VOID;
         }
         return 3;
       }
@@ -256,7 +262,7 @@ int FinishShotCoordinate(int X, int Y) {
       CheckShotSeparator(PlayerField, X, Y);
       if (HealthPlayerShip[NumShip] == 0) {
         SetKillSeparators(NumShip, 2);
-        Memory = 0;
+        Memory = MEM_VOID;
       }
       return 0;
     }
