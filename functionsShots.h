@@ -163,6 +163,21 @@ int InputShotCoordinate() {
   return 0;
 }
 
+int ConsequencesShot(int X, int Y) {
+  XodBot = 1;
+  int NumShip = (int)PlayerField[X][Y] - MAGICNUMBER;
+  HealthPlayerShip[NumShip] -= 1;
+  PlayerHP -= 1;
+  PlayerField[X][Y] = POPAL;
+  CheckShotSeparator(PlayerField, X, Y);
+  if (HealthPlayerShip[NumShip] == 0) {
+    SetKillSeparators(NumShip, SIDE_ENEMY);
+    Memory = MEM_VOID;
+  }
+  if (PlayerHP == 0) return 2;
+  return 0;
+}
+
 int GenerateShotCoordinate() {
   int Y, X, Status = 1, Array[SIZE], i = SIZE;
   while (Status == 1) {
@@ -179,21 +194,10 @@ int GenerateShotCoordinate() {
     else {
       Status = 0;
       if (PlayerField[X][Y] != '0') {
-        XodBot = 1;
         Memory = MEM_POINT;
         XMem = X;
         YMem = Y;
-        int NumShip = (int)PlayerField[X][Y] - MAGICNUMBER;
-        HealthPlayerShip[NumShip] -= 1;
-        PlayerHP -= 1;
-        if (PlayerHP == 0) return 2;
-        PlayerField[X][Y] = POPAL;
-        //OutPutField(PlayerField, EnemyField);
-        CheckShotSeparator(PlayerField, X, Y);
-        if (HealthPlayerShip[NumShip] == 0) {
-          SetKillSeparators(NumShip, SIDE_ENEMY);
-          Memory = MEM_VOID;
-        }
+        if (ConsequencesShot(X, Y) == 2) return 2;
       }
       else {
         PlayerField[X][Y] = PROMAX;
@@ -201,7 +205,6 @@ int GenerateShotCoordinate() {
       }
     }
   }
-  //OutPutField(PlayerField, EnemyField);
   return 0;
 }
 
@@ -209,18 +212,8 @@ int DirShotCoordinate(int X, int Y) {
   if (CheckEdge(X, Y)) {
     if (PlayerField[X][Y] != PROMAX) {
       if (PlayerField[X][Y] != '0') {
-        XodBot = 1;
         Memory = MEM_DIRECTION;
-        int NumShip = (int)PlayerField[X][Y] - MAGICNUMBER;
-        HealthPlayerShip[NumShip] -= 1;
-        PlayerHP -= 1;
-        if (PlayerHP == 0) return 2;
-        PlayerField[X][Y] = POPAL;
-        CheckShotSeparator(PlayerField, X, Y);
-        if (HealthPlayerShip[NumShip] == 0) {
-          SetKillSeparators(NumShip, SIDE_ENEMY);
-          Memory = MEM_VOID;
-        }
+        if (ConsequencesShot(X, Y) == 2) return 2;
         return 3;
       }
       else {
@@ -260,17 +253,7 @@ int DirFindShotCoordintare() {
 int FinishShotCoordinate(int X, int Y) {
   if (PlayerField[X][Y] != POPAL) {
     if (PlayerField[X][Y] != '0') {
-      XodBot = 1;
-      int NumShip = (int)PlayerField[X][Y] - MAGICNUMBER;
-      HealthPlayerShip[NumShip] -= 1;
-      PlayerHP -= 1;
-      if (PlayerHP == 0) return 2;
-      PlayerField[X][Y] = POPAL;
-      CheckShotSeparator(PlayerField, X, Y);
-      if (HealthPlayerShip[NumShip] == 0) {
-        SetKillSeparators(NumShip, SIDE_ENEMY);
-        Memory = MEM_VOID;
-      }
+      if (ConsequencesShot(X, Y) == 2) return 2;
       return 0;
     }
     else {
