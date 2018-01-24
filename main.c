@@ -1,5 +1,5 @@
-#include "functionsLocated.h"
-#include "functionsShots.h"
+#include "functionsLocated.c"
+#include "functionsShots.c"
 
 char PlayerField[SIZE][SIZE];
 char PlayerShotsField[SIZE][SIZE];

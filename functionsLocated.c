@@ -67,7 +67,6 @@ void OutPutField(char FirstField[SIZE][SIZE], char SecondField[SIZE][SIZE]) {
     }
     printf("\n");
   }
-
 }
 
 void SetSeparator(char Field[SIZE][SIZE], int X, int Y) {
@@ -98,7 +97,7 @@ int SetHorizontalShip(char Field[SIZE][SIZE], int X, int Y, int NumShip, int Sid
     Field[X][i] = Alp[NumShip];;
     CheckSeparator(Field, X, i);
   }
-  if (Side == 1) {
+  if (Side == 1) { // это я не выносил в одну функцию, т.к. прибавления здесь идут к искам, а там к игрекам
     PlayerKillSeparatorsX[NumShip][0] = X ;
     PlayerKillSeparatorsY[NumShip][0] = Y - 1;
     PlayerKillSeparatorsX[NumShip][1] = X;
@@ -188,10 +187,9 @@ void GenerateBigShip(char Field[SIZE][SIZE], int NumShip) {
     X = Array[i];
     Y = Array[i - 1];
     Direction = Array[i] % 2;
-    if (CheckEdge(X, Y) && (Direction == 0))
-      Status = SetHorizontalShip(Field, X, Y, NumShip, 2);
-    if (CheckEdge(X, Y) && (Direction == 1))
-      Status = SetVerticalShip(Field, X, Y, NumShip, 2);
+    if(CheckEdge(X, Y)) {
+      (Direction == 0) ? (Status = SetHorizontalShip(Field, X, Y, NumShip, 2)) : (Status = SetVerticalShip(Field, X, Y, NumShip, 2));
+    }
   }
 }
 

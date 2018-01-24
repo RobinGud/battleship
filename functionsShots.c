@@ -63,46 +63,33 @@ void SetKillSeparators(int NumShip, enum SIDE Side) {
       X2 = EnemyKillSeparatorsX[NumShip][1];
       Y1 = EnemyKillSeparatorsY[NumShip][0];
       Y2 = EnemyKillSeparatorsY[NumShip][1];
-      if (CheckEdge(X1, Y1)) {
-        PlayerShotsField[X1][Y1] = PROMAX;
-      }
-      if (CheckEdge(X2, Y2)) {
-        PlayerShotsField[X2][Y2] = PROMAX;
-      }
     }
     else {
       X1 = PlayerKillSeparatorsX[NumShip][0];
       X2 = PlayerKillSeparatorsX[NumShip][1];
       Y1 = PlayerKillSeparatorsY[NumShip][0];
       Y2 = PlayerKillSeparatorsY[NumShip][1];
+      }
       if (CheckEdge(X1, Y1)) {
-        PlayerField[X1][Y1] = PROMAX;
+        (Side == SIDE_PLAYER) ? (PlayerShotsField[X1][Y1] = PROMAX) : (PlayerField[X1][Y1] = PROMAX);
       }
       if (CheckEdge(X2, Y2)) {
-        PlayerField[X2][Y2] = PROMAX;
-      }
-      }
+        (Side == SIDE_PLAYER) ? (PlayerShotsField[X2][Y2] = PROMAX) : (PlayerField[X2][Y2] = PROMAX);
     }
+  }
   else {
     if (Side == SIDE_PLAYER) {
       X = EnemyKillSmallSeparators[NumShip - 6][0];
       Y = EnemyKillSmallSeparators[NumShip - 6][1];
-      for(int i = X - 1; i <= X + 1; i++) {
-        for(int j = Y - 1; j <= Y + 1; j++) {
-          if (CheckEdge(i, j) && (i == X ^ j == Y)) {
-            PlayerShotsField[i][j] = PROMAX;
-          }
-        }
-      }
     }
     else {
       X = PlayerKillSmallSeparators[NumShip - 6][0];
       Y = PlayerKillSmallSeparators[NumShip - 6][1];
-      for(int i = X - 1; i <= X + 1; i++) {
-        for(int j = Y - 1; j <= Y + 1; j++) {
-          if (CheckEdge(i, j) && (i == X ^ j == Y)) {
-            PlayerField[i][j] = PROMAX;
-          }
+    }
+    for(int i = X - 1; i <= X + 1; i++) {
+      for(int j = Y - 1; j <= Y + 1; j++) {
+        if (CheckEdge(i, j) && (i == X ^ j == Y)) {
+          (Side == SIDE_PLAYER) ? (PlayerShotsField[i][j] = PROMAX) : (PlayerField[i][j] = PROMAX);
         }
       }
     }
