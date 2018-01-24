@@ -1,22 +1,6 @@
+#include "main.h"
 #include "functionsLocated.c"
 #include "functionsShots.c"
-
-char PlayerField[SIZE][SIZE];
-char PlayerShotsField[SIZE][SIZE];
-char EnemyField[SIZE][SIZE];
-int PlayerKillSmallSeparators[4][2];
-int PlayerKillSeparatorsX[6][2];
-int PlayerKillSeparatorsY[6][2];
-int EnemyKillSmallSeparators[4][2];
-int EnemyKillSeparatorsX[6][2];
-int EnemyKillSeparatorsY[6][2];
-int PlayerHP = 20;
-int EnemyHP = 20;
-enum MEM Memory = MEM_VOID;
-int XMem = 0;
-int YMem = 0;
-int WinFlag = 0;
-int XodBot = 0;
 
 int main () {
   LocationShip();

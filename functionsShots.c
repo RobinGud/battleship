@@ -1,47 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <stdbool.h>
-#define SIZE 10
-#define MAGICNUMBER 65
-#define POPAL '#'
-#define PROMAX '*'
-#define PYSTO '0'
-
-enum MEM {
-  MEM_VOID,
-  MEM_POINT,
-  MEM_DIRECTION
-};
-
-enum DIR {
-  DIR_HORIZONTAL = 1,
-  DIR_VERTICAL = 2
-};
-
-extern char PlayerField[SIZE][SIZE];
-extern char PlayerShotsField[SIZE][SIZE];
-extern char EnemyField[SIZE][SIZE];
-extern int PlayerKillSmallSeparators[4][2];
-extern int PlayerKillSeparatorsX[6][2];
-extern int PlayerKillSeparatorsY[6][2];
-extern int EnemyKillSmallSeparators[4][2];
-extern int EnemyKillSeparatorsX[6][2];
-extern int EnemyKillSeparatorsY[6][2];
-extern int PlayerHP;
-extern int EnemyHP;
-extern enum MEM Memory;
- enum DIR DirMem;
-extern int XMem;
-extern int YMem;
-extern int XodBot;
-
-int HealthPlayerShip[SIZE] = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
-int HealthEnemyShip[SIZE] = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
-
-void SetSeparator(char Field[SIZE][SIZE], int X, int Y);
-void OutPutField(char FirstField[SIZE][SIZE], char SecondField[SIZE][SIZE]);
-int RandomArray(int Array[SIZE]);
+#include "main.h"
 
 int CheckEdge(int X, int Y) {
    return ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE));

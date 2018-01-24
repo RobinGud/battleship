@@ -1,31 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#define SIZE 10
-#define PYSTO '0'
-#define PROMAX '*'
-
-enum SIDE {
-  SIDE_PLAYER = 1,
-  SIDE_ENEMY = 2
-};
-
-extern char PlayerField[SIZE][SIZE];
-extern char PlayerShotsField[SIZE][SIZE];
-extern char EnemyField[SIZE][SIZE];
-extern int PlayerKillSmallSeparators[4][2];
-extern int PlayerKillSeparatorsX[6][2];
-extern int PlayerKillSeparatorsY[6][2];
-extern int EnemyKillSmallSeparators[4][2];
-extern int EnemyKillSeparatorsX[6][2];
-extern int EnemyKillSeparatorsY[6][2];
-extern int EnemyHP;
-extern int PlayerHP;
-
-int LenShips[SIZE] = {4, 3, 3, 2, 2, 2, 1, 1, 1, 1};
-char Alp[SIZE] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
-
-int CheckEdge (int X, int Y);
+#include "main.h"
 
 int RandomArray(int Array[SIZE]) {
     srand(time(NULL));
