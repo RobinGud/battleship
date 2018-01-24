@@ -144,7 +144,7 @@ void SetBigShip(char Field[SIZE][SIZE], int NumShip) {
     int Y, Status = 1, X;
     char charY, Direction;
     while (Status == 1) {
-      printf("Input left top coo  rdinate and direction for %d deck ship(x, y, [h, v]): ", LenShips[NumShip]);
+      printf("Input left top coordinate and direction for %d deck ship(x, y, [h, v]): ", LenShips[NumShip]);
       scanf("%1c%1d%1c", &charY, &X, &Direction);
       fflush(stdin);
       Y = (int)charY - 97;

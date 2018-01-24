@@ -14,6 +14,11 @@ enum MEM {
   MEM_DIRECTION
 };
 
+enum DIR {
+  DIR_HORIZONTAL = 1,
+  DIR_VERTICAL = 2
+};
+
 extern char PlayerField[SIZE][SIZE];
 extern char PlayerShotsField[SIZE][SIZE];
 extern char EnemyField[SIZE][SIZE];
@@ -26,7 +31,7 @@ extern int EnemyKillSeparatorsY[6][2];
 extern int PlayerHP;
 extern int EnemyHP;
 extern enum MEM Memory;
-extern int DirMem;
+ enum DIR DirMem;
 extern int XMem;
 extern int YMem;
 extern int XodBot;
@@ -45,18 +50,19 @@ int CheckEdge(int X, int Y) {
 void CheckShotSeparator(char Field[SIZE][SIZE], int X, int Y) {
   for(int i = X - 1; i <= X + 1; i += 2) {
     for(int j = Y - 1; j <= Y + 1; j += 2) {
-    SetSeparator(Field, i, j);
+    if (CheckEdge(i, j)) SetSeparator(Field, i, j);
     }
   }
 }
 
 void SetKillSeparators(int NumShip, enum SIDE Side) {
-  if (Side == SIDE_PLAYER) {
-    if (NumShip < 6) {
-      int X1 = EnemyKillSeparatorsX[NumShip][0];
-      int X2 = EnemyKillSeparatorsX[NumShip][1];
-      int Y1 = EnemyKillSeparatorsY[NumShip][0];
-      int Y2 = EnemyKillSeparatorsY[NumShip][1];
+  int X, X1, X2, Y, Y1, Y2;
+  if (NumShip < 6) {
+    if (Side == SIDE_PLAYER) {
+      X1 = EnemyKillSeparatorsX[NumShip][0];
+      X2 = EnemyKillSeparatorsX[NumShip][1];
+      Y1 = EnemyKillSeparatorsY[NumShip][0];
+      Y2 = EnemyKillSeparatorsY[NumShip][1];
       if (CheckEdge(X1, Y1)) {
         PlayerShotsField[X1][Y1] = PROMAX;
       }
@@ -65,49 +71,39 @@ void SetKillSeparators(int NumShip, enum SIDE Side) {
       }
     }
     else {
-      int X = EnemyKillSmallSeparators[NumShip - 6][0];
-      int Y = EnemyKillSmallSeparators[NumShip - 6][1];
-      if (CheckEdge(X - 1, Y)) {
-        PlayerShotsField[X - 1][Y] = PROMAX;
-      }
-      if (CheckEdge(X + 1, Y)) {
-        PlayerShotsField[X + 1][Y] = PROMAX;
-      }
-      if (CheckEdge(X, Y - 1)) {
-        PlayerShotsField[X][Y - 1] = PROMAX;
-      }
-      if (CheckEdge(X, Y + 1)) {
-        PlayerShotsField[X][Y + 1] = PROMAX;
-      }
-    }
-  }
-  if (Side == SIDE_ENEMY) {
-    if (NumShip < 6) {
-      int X1 = PlayerKillSeparatorsX[NumShip][0];
-      int X2 = PlayerKillSeparatorsX[NumShip][1];
-      int Y1 = PlayerKillSeparatorsY[NumShip][0];
-      int Y2 = PlayerKillSeparatorsY[NumShip][1];
+      X1 = PlayerKillSeparatorsX[NumShip][0];
+      X2 = PlayerKillSeparatorsX[NumShip][1];
+      Y1 = PlayerKillSeparatorsY[NumShip][0];
+      Y2 = PlayerKillSeparatorsY[NumShip][1];
       if (CheckEdge(X1, Y1)) {
         PlayerField[X1][Y1] = PROMAX;
       }
       if (CheckEdge(X2, Y2)) {
         PlayerField[X2][Y2] = PROMAX;
       }
+      }
+    }
+  else {
+    if (Side == SIDE_PLAYER) {
+      X = EnemyKillSmallSeparators[NumShip - 6][0];
+      Y = EnemyKillSmallSeparators[NumShip - 6][1];
+      for(int i = X - 1; i <= X + 1; i++) {
+        for(int j = Y - 1; j <= Y + 1; j++) {
+          if (CheckEdge(i, j) && (i == X ^ j == Y)) {
+            PlayerShotsField[i][j] = PROMAX;
+          }
+        }
+      }
     }
     else {
-      int X = PlayerKillSmallSeparators[NumShip - 6][0];
-      int Y = PlayerKillSmallSeparators[NumShip - 6][1];
-      if (CheckEdge(X - 1, Y)) {
-        PlayerField[X - 1][Y] = PROMAX;
-      }
-      if (CheckEdge(X + 1, Y)) {
-        PlayerField[X + 1][Y] = PROMAX;
-      }
-      if (CheckEdge(X, Y - 1)) {
-        PlayerField[X][Y - 1] = PROMAX;
-      }
-      if (CheckEdge(X, Y + 1)) {
-        PlayerField[X][Y + 1] = PROMAX;
+      X = PlayerKillSmallSeparators[NumShip - 6][0];
+      Y = PlayerKillSmallSeparators[NumShip - 6][1];
+      for(int i = X - 1; i <= X + 1; i++) {
+        for(int j = Y - 1; j <= Y + 1; j++) {
+          if (CheckEdge(i, j) && (i == X ^ j == Y)) {
+            PlayerField[i][j] = PROMAX;
+          }
+        }
       }
     }
   }
@@ -130,7 +126,7 @@ int InputShotCoordinate() {
         EnemyHP -= 1;
         if (EnemyHP == 0) return 1;
         if (HealthEnemyShip[NumShip] == 0) {
-          SetKillSeparators(NumShip, SIDE_PLAYER);
+          SetKillSeparators(NumShip, 1);
         }
       }
       else {
@@ -172,21 +168,17 @@ int GenerateShotCoordinate() {
     }
     X = Array[i];
     Y = Array[i - 1];
-    if (PlayerField[X][Y] == PROMAX || PlayerField[X][Y] == POPAL) {
-      continue;
+    if (PlayerField[X][Y] == PROMAX || PlayerField[X][Y] == POPAL) continue;
+    Status = 0;
+    if (PlayerField[X][Y] != PYSTO) {
+      Memory = MEM_POINT;
+      XMem = X;
+      YMem = Y;
+      if (ConsequencesShot(X, Y) == 2) return 2;
     }
     else {
-      Status = 0;
-      if (PlayerField[X][Y] != PYSTO) {
-        Memory = MEM_POINT;
-        XMem = X;
-        YMem = Y;
-        if (ConsequencesShot(X, Y) == 2) return 2;
-      }
-      else {
-        PlayerField[X][Y] = PROMAX;
-        XodBot = 0;
-      }
+      PlayerField[X][Y] = PROMAX;
+      XodBot = 0;
     }
   }
   return 0;
@@ -219,7 +211,7 @@ int DirFindShotCoordintare() {
     Status = DirShotCoordinate(XMem + 1, YMem);
   }
   if (Status == 3) {
-    DirMem = 1;
+    DirMem = DIR_HORIZONTAL;
   }
   if (Status == 1) {
     Status = DirShotCoordinate(XMem, YMem - 1);
@@ -228,7 +220,7 @@ int DirFindShotCoordintare() {
     Status = DirShotCoordinate(XMem, YMem + 1);
   }
   if (Status == 3) {
-    DirMem = 2;
+    DirMem = DIR_VERTICAL;
   }
   if (Status == 2) return 2;
   if (Status == 0 || Status == 3) return 0;
@@ -251,7 +243,7 @@ int FinishShotCoordinate(int X, int Y) {
 
 int FindFinishShotCoordinate() {
   int X = XMem, Y = YMem, Status = 1;
-  if (DirMem == 1) {
+  if (DirMem == DIR_HORIZONTAL) {
     while (CheckEdge(X - 1, Y) && Status == 1) {
      if (PlayerField[X - 1][Y] == PROMAX) break;
       X--;
@@ -264,7 +256,7 @@ int FindFinishShotCoordinate() {
       Status = FinishShotCoordinate(X, Y);
     }
   }
-  else if (DirMem == 2) {
+  else if (DirMem == DIR_VERTICAL) {
     while (CheckEdge(X, Y - 1) && Status == 1) {
       if (PlayerField[X][Y - 1] == PROMAX) break;
       Y--;

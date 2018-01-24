@@ -13,7 +13,6 @@ int EnemyKillSeparatorsY[6][2];
 int PlayerHP = 20;
 int EnemyHP = 20;
 enum MEM Memory = MEM_VOID;
-int DirMem = 0;
 int XMem = 0;
 int YMem = 0;
 int WinFlag = 0;
