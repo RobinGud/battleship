@@ -6,16 +6,12 @@
 #define MAGICNUMBER 65
 #define POPAL '#'
 #define PROMAX '*'
+#define PYSTO '0'
 
 enum MEM {
   MEM_VOID,
   MEM_POINT,
   MEM_DIRECTION
-};
-
-enum SIDE {
-  SIDE_PLAYER = 1,
-  SIDE_ENEMY = 2
 };
 
 extern char PlayerField[SIZE][SIZE];
@@ -42,28 +38,16 @@ void SetSeparator(char Field[SIZE][SIZE], int X, int Y);
 void OutPutField(char FirstField[SIZE][SIZE], char SecondField[SIZE][SIZE]);
 int RandomArray(int Array[SIZE]);
 
-int CheckEdge (int X, int Y) {
-   if ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE)) {
-     return true;
-   }
-   else {
-     return false;
-   }
+int CheckEdge(int X, int Y) {
+   return ((X >= 0) && (X < SIZE) && (Y >= 0) && (Y < SIZE));
 }
 
 void CheckShotSeparator(char Field[SIZE][SIZE], int X, int Y) {
-  if (CheckEdge(X - 1, Y + 1)) {
-    SetSeparator(Field, X - 1, Y + 1);
-  };
-  if (CheckEdge(X + 1, Y + 1)) {
-    SetSeparator(Field, X + 1, Y + 1);
-  };
-  if (CheckEdge(X - 1, Y - 1)) {
-    SetSeparator(Field, X - 1, Y - 1);
-  };
-  if (CheckEdge(X + 1, Y - 1)) {
-    SetSeparator(Field, X + 1, Y - 1);
-  };
+  for(int i = X - 1; i <= X + 1; i += 2) {
+    for(int j = Y - 1; j <= Y + 1; j += 2) {
+    SetSeparator(Field, i, j);
+    }
+  }
 }
 
 void SetKillSeparators(int NumShip, enum SIDE Side) {
@@ -138,7 +122,7 @@ int InputShotCoordinate() {
     fflush(stdin);
     Y = (int)charY - 97;
     if (CheckEdge(X, Y) && (PlayerShotsField[X][Y] != POPAL) && (PlayerShotsField[X][Y] != PROMAX)) {
-      if (EnemyField[X][Y] != '0') {
+      if (EnemyField[X][Y] != PYSTO) {
         PlayerShotsField[X][Y] = POPAL;
         CheckShotSeparator(PlayerShotsField, X, Y);
         int NumShip = (int)EnemyField[X][Y] - MAGICNUMBER;
@@ -193,7 +177,7 @@ int GenerateShotCoordinate() {
     }
     else {
       Status = 0;
-      if (PlayerField[X][Y] != '0') {
+      if (PlayerField[X][Y] != PYSTO) {
         Memory = MEM_POINT;
         XMem = X;
         YMem = Y;
@@ -211,7 +195,7 @@ int GenerateShotCoordinate() {
 int DirShotCoordinate(int X, int Y) {
   if (CheckEdge(X, Y)) {
     if (PlayerField[X][Y] != PROMAX) {
-      if (PlayerField[X][Y] != '0') {
+      if (PlayerField[X][Y] != PYSTO) {
         Memory = MEM_DIRECTION;
         if (ConsequencesShot(X, Y) == 2) return 2;
         return 3;
@@ -252,7 +236,7 @@ int DirFindShotCoordintare() {
 
 int FinishShotCoordinate(int X, int Y) {
   if (PlayerField[X][Y] != POPAL) {
-    if (PlayerField[X][Y] != '0') {
+    if (PlayerField[X][Y] != PYSTO) {
       if (ConsequencesShot(X, Y) == 2) return 2;
       return 0;
     }

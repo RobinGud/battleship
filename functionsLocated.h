@@ -2,6 +2,13 @@
 #include <stdlib.h>
 #include <time.h>
 #define SIZE 10
+#define PYSTO '0'
+#define PROMAX '*'
+
+enum SIDE {
+  SIDE_PLAYER = 1,
+  SIDE_ENEMY = 2
+};
 
 extern char PlayerField[SIZE][SIZE];
 extern char PlayerShotsField[SIZE][SIZE];
@@ -30,7 +37,7 @@ int RandomArray(int Array[SIZE]) {
 void FillField(char Field[SIZE][SIZE]) {
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
-      Field[i][j] = '0';
+      Field[i][j] = PYSTO;
     }
   }
 }
@@ -64,36 +71,19 @@ void OutPutField(char FirstField[SIZE][SIZE], char SecondField[SIZE][SIZE]) {
 }
 
 void SetSeparator(char Field[SIZE][SIZE], int X, int Y) {
-  if (Field[X][Y] == '0') {
-    Field[X][Y] = '*';
+  if (Field[X][Y] == PYSTO) {
+    Field[X][Y] = PROMAX;
   }
 }
 
 void CheckSeparator(char Field[SIZE][SIZE], int X, int Y) {
-  if (CheckEdge(X - 1, Y + 1)) {
-    SetSeparator(Field, X - 1, Y + 1);
-  };
-  if (CheckEdge(X, Y + 1)) {
-    SetSeparator(Field, X, Y + 1);
-  };
-  if (CheckEdge(X + 1, Y + 1)) {
-    SetSeparator(Field, X + 1, Y + 1);
-  };
-  if (CheckEdge(X - 1, Y)) {
-    SetSeparator(Field, X - 1, Y);
-  };
-  if (CheckEdge(X + 1, Y)) {
-    SetSeparator(Field, X + 1, Y);
-  };
-  if (CheckEdge(X - 1, Y - 1)) {
-    SetSeparator(Field, X - 1, Y - 1);
-  };
-  if (CheckEdge(X, Y - 1)) {
-    SetSeparator(Field, X, Y - 1);
-  };
-  if (CheckEdge(X + 1, Y - 1)) {
-    SetSeparator(Field, X + 1, Y - 1);
-  };
+  for(int i = X - 1; i <= X + 1; i++) {
+    for(int j = Y - 1; j <= Y + 1; j++) {
+      if (CheckEdge(i, j) && (i != X || j != Y)) {
+        SetSeparator(Field, i, j);
+      }
+    }
+  }
 }
 
 int SetHorizontalShip(char Field[SIZE][SIZE], int X, int Y, int NumShip, int Side) {
@@ -175,7 +165,7 @@ void SetSmallShip(char Field[SIZE][SIZE],int NumShip) {
     scanf("%1c%1d", &charY, &X);
     fflush(stdin);
     Y = (int)charY - 97;
-    if (CheckEdge(X, Y) && (PlayerField[X][Y] == '0')) {
+    if (CheckEdge(X, Y) && (PlayerField[X][Y] == PYSTO)) {
       PlayerField[X][Y] = Alp[NumShip];
       PlayerKillSmallSeparators[NumShip - 6][0] = X;
       PlayerKillSmallSeparators[NumShip - 6][1] = Y;
@@ -215,7 +205,7 @@ void GenerateSmallShip(char Field[SIZE][SIZE],int NumShip) {
     }
     X = Array[i];
     Y = Array[i - 1];
-    if (CheckEdge(X, Y) && (EnemyField[X][Y] == '0')) {
+    if (CheckEdge(X, Y) && (EnemyField[X][Y] == PYSTO)) {
       EnemyField[X][Y] = Alp[NumShip];
       EnemyKillSmallSeparators[NumShip - 6][0] = X;
       EnemyKillSmallSeparators[NumShip - 6][1] = Y;
@@ -228,8 +218,8 @@ void GenerateSmallShip(char Field[SIZE][SIZE],int NumShip) {
 void ClearSeparators(char Field[SIZE][SIZE]) {
   for (int i = 0; i < SIZE; i++) {
     for (int j = 0; j < SIZE; j++) {
-      if(Field[i][j] == '*') {
-        Field[i][j] = '0';
+      if(Field[i][j] == PROMAX) {
+        Field[i][j] = PYSTO;
       }
     }
   }
